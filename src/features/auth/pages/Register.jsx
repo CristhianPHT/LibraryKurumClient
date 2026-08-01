@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 
 import { register } from '@/features/auth/api/authApi'
+import { useAuth } from '@srd/context/authContext'
 
 export default function Register() {
 
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -48,10 +50,7 @@ export default function Register() {
       */
 
       if (result?.token) {
-        localStorage.setItem(
-          'token',
-          result.token
-        )
+        await login(result.token)
         navigate('/')
       }
     } catch (err) {

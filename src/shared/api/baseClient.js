@@ -1,3 +1,5 @@
+import { getToken } from '@/shared/auth/tokenStorage'
+
 const API_BASE =
   import.meta.env.VITE_API_URL ?? ''
 
@@ -11,8 +13,7 @@ export async function baseRequest( endpoint,
   }
 
   if (auth) {
-    const token =
-      localStorage.getItem('token')
+    const token = getToken()
     if (token) {
       options.headers.Authorization =
         `Bearer ${token}`

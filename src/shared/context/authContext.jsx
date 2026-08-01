@@ -1,51 +1,99 @@
-// 'src/shared/context/authContext'
-import { createContext, useContext, useEffect, useState } from 'react'
-import { getUser } from '@/features/users/api/header'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
-const AuthContext = createContext()
+import { clearToken, getToken, setToken } from '@/shared/auth/tokenStorage'
+import { getUserHeader } from '@/features/users/api/usersApi'
+
+const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  async function login(token) {
-    localStorage.setItem('token', token)
+  const isAuthenticated = user != null
 
-    try {
-      const data = await getUser()
-      setUser(data)
-    } catch {
-      setUser(null)
-    }
-  }
-  function logout() {
-    localStorage.removeItem('token')
+  const clearSession = useCallback(() => {
+    clearToken()
     setUser(null)
-  }
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (!token) return
-    getUser()
-      .then(setUser)
-      .catch(() => {
-        localStorage.removeItem('token')
-        setUser(null)
-      })
   }, [])
 
+  const login = useCallback(async (token) => {
+    setToken(token)
+
+    try {
+      const data = await getUserHeader()
+      setUser(data)
+    } catch {
+      clearSession()
+    }
+  }, [clearSession])
+
+  const logout = useCallback(() => {
+    clearSession()
+  }, [clearSession])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function restoreSession() {
+      const token = getToken()
+
+      if (!token) {
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        const data = await getUserHeader()
+        if (!cancelled) {
+          setUser(data)
+        }
+      } catch {
+        if (!cancelled) {
+          clearSession()
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    restoreSession()
+
+    return () => {
+      cancelled = true
+    }
+  }, [clearSession])
+
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      isLoading,
+      login,
+      logout,
+    }),
+    [user, isAuthenticated, isLoading, login, logout],
+  )
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )
 }
 
 export function useAuth() {
-  return useContext(AuthContext)
+  const context = useContext(AuthContext)
+  if (context == null) {
+    throw new Error('useAuth debe usarse dentro de AuthProvider')
+  }
+  return context
 }
