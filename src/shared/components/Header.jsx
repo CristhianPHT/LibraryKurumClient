@@ -5,34 +5,51 @@ import UserMenu from "./Usermenu"
 import SearchBar from "./Searchbar"
 
 export default function Header() {
-const { user } = useAuth()
-
+  const { user } = useAuth()
   return (
-    <header className="w-full px-6 py-4 flex items-center justify-between border-b border-white/10">
+  <header className="w-full px-6 py-4 flex items-center justify-between border-b border-white/10 bg-[#181E37] text-slate-200">
       
+      {/* Navegación principal */}
     <div className="flex items-center gap-6">
-        {/* Logo */}
-      <Link to="/" className="text-xl font-bold tracking-wide">Kurum</Link>
-      <Link to="/explore">Explorar</Link>
-      <SearchBar />
+        {/* Logo / Home */}
+        <Link to="/" className="text-xl font-bold tracking-wide text-white transition-colors hover:text-indigo-300" >
+          Kurum
+        </Link>
+        {/* Docs - temporal */}
+        <Link to="/docs" className="text-sm text-slate-300 transition-colors hover:text-white" >
+          Docs
+        </Link>
+        {/* Biblioteca */}
+        <Link to="/books/1" className="text-sm text-slate-300 transition-colors hover:text-white" >
+          Mi biblioteca
+        </Link>
+        {/* Búsqueda avanzada */}
+        <Link to="/search" className="text-sm text-slate-300 transition-colors hover:text-white" >
+          Buscar
+        </Link>
+        {/* Gestión / Creador */}
+        <Link to="/books/manage/config" className="text-sm text-slate-300 transition-colors hover:text-white" >
+          Gestión
+        </Link>
+        {/* Búsqueda rápida */}
+        <SearchBar />
     </div>
 
-      {/* Nav */}
-      <nav className="flex items-center gap-4">
-        {user ? (
+    <nav className="flex items-center gap-4">
+      {user ? (
         <UserMenu/>
-        ) : (
+      ) : (
       <>
-        <Link to="/login" className="text-sm hover:text-white/70 transition-colors">
-          Iniciar sesión
-        </Link>
-        <Link to="/register" className="text-sm bg-white text-black px-4 py-1.5 rounded hover:bg-white/90 transition-colors">
-          Registrarse
-        </Link>
+      <Link to="/login" className="text-sm hover:text-white/70 transition-colors text-slate-300">
+        Iniciar sesión
+      </Link>
+      <Link to="/register" className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition-colors font-medium">
+        Registrarse
+      </Link>
       </>
-        )}
-      </nav>
+      )}
+    </nav>
 
-    </header>
+  </header>
   )
 }

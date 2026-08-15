@@ -1,30 +1,31 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { clearToken, getToken, setToken } from '@/shared/auth/tokenStorage'
-import { getUserHeader } from '@/features/users/api/usersApi'
+import { getUser, getUserHeader } from '@/features/users/api/usersApi'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isProfileLoading, setIsProfileLoading] = useState(false)
+
+  const profileRef = useRef(null)
 
   const isAuthenticated = user != null
 
   const clearSession = useCallback(() => {
     clearToken()
     setUser(null)
+    profileRef.current = null
+    setProfile(null)
   }, [])
 
   const login = useCallback(async (token) => {
     setToken(token)
+    profileRef.current = null
+    setProfile(null)
 
     try {
       const data = await getUserHeader()
@@ -37,6 +38,30 @@ export function AuthProvider({ children }) {
   const logout = useCallback(() => {
     clearSession()
   }, [clearSession])
+
+  const loadProfile = useCallback(async ({ force = false } = {}) => {
+    if (!getToken()) {
+      return null
+    }
+
+    if (!force && profileRef.current) {
+      return profileRef.current
+    }
+
+    setIsProfileLoading(true)
+    try {
+      const data = await getUser()
+      profileRef.current = data
+      setProfile(data)
+      return data
+    } catch {
+      profileRef.current = null
+      setProfile(null)
+      return null
+    } finally {
+      setIsProfileLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -75,12 +100,24 @@ export function AuthProvider({ children }) {
   const value = useMemo(
     () => ({
       user,
+      profile,
       isAuthenticated,
       isLoading,
+      isProfileLoading,
       login,
       logout,
+      loadProfile,
     }),
-    [user, isAuthenticated, isLoading, login, logout],
+    [
+      user,
+      profile,
+      isAuthenticated,
+      isLoading,
+      isProfileLoading,
+      login,
+      logout,
+      loadProfile,
+    ],
   )
 
   return (

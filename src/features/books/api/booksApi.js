@@ -7,16 +7,21 @@ export function getBooksByUser(nickname) { // Libros públicos de un usuario
     auth: false,
   })
 }
-
 // export function getBooksByPage(page) { // Últimos libros publicados (falta completar)
 //   return baseRequest(`/books/${page}`, {
 //     auth: false,
 //   })
 // }
-
-export function getBook(slug) { // Obtener un libro mediante su slug
-  return baseRequest(`/books/${slug}`)
+export function getBooksByPage(page = 1) {
+  return baseRequest(`/books/${page}`)
 }
+
+export function getBookBySlug(slug) {
+  return baseRequest(`/book/${encodeURIComponent(slug)}`)
+}
+// export function getBook(slug) { // Obtener un libro mediante su slug
+//   return baseRequest(`/books/${slug}`)
+// }
 
 export function getMyBooks() { // .Todos los libros del usuario
   return baseRequest('/me/books', {
@@ -45,3 +50,4 @@ export function createBookByUser(data) { // Crea relación entre libro y usuario
     auth: true,
   })
 }
+

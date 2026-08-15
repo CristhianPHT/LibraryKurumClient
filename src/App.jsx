@@ -7,6 +7,12 @@ import Register from '@/features/auth/pages/Register'
 import Home from '@/features/home/pages/Home'
 import { AuthProvider } from '@/shared/context/authContext'
 // import User from '@features/users/pages/User'
+import BooksConfig from '@/features/books/pages/BooksConfig'
+import ProfilePage from '@/features/users/pages/ProfilePage'
+import CreateBooksPage from '@/features/books/pages/CreateBooksPage'
+import Docs from '@/features/docs/Docs'
+import BookDetailPage from './features/books/pages/BookDetailPage'
+import BooksPage from './features/books/pages/BooksPage'
 
 export default function App() {
   return (
@@ -14,13 +20,18 @@ export default function App() {
     <Routes>
       <Route element={<MainLayout />}>
         públicas
+        <Route path="/book/:slug" element= {<BookDetailPage />} />
+        <Route path="/books/:page" element={<BooksPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         privadas
         {/* <Route element={<PrivateRoute />}> */}
-          <Route path="/" element={<Home />} />
+        <Route path="/manage/books/create" element={<CreateBooksPage />} />
+        <Route path="/books/manage/config" element={<BooksConfig />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<ProfilePage />} />
           {/* <Route path="/user/:username" element={<User />} /> */}
+        <Route path="/docs/*" element={<Docs />} />
         {/* </Route> */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
