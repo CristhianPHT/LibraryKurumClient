@@ -1,0 +1,7 @@
+Tema
+
+Idioma
+
+Configuraciones
+
+Preferencias
