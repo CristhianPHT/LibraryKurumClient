@@ -7,12 +7,18 @@ import Register from '@/features/auth/pages/Register'
 import Home from '@/features/home/pages/Home'
 import { AuthProvider } from '@/shared/context/authContext'
 // import User from '@features/users/pages/User'
-import BooksConfig from '@/features/books/pages/BooksConfig'
-import ProfilePage from '@/features/users/pages/ProfilePage'
-import CreateBooksPage from '@/features/books/pages/CreateBooksPage'
 import Docs from '@/features/docs/Docs'
+import ProfilePage from '@/features/users/pages/ProfilePage'
 import BookDetailPage from './features/books/pages/BookDetailPage'
 import BooksPage from './features/books/pages/BooksPage'
+
+import BooksConfig from '@/features/books/pages/BooksConfig'
+import CreateBooksPage from '@/features/books/pages/CreateBooksPage'
+
+import GestionLayout from '@/features/books/layouts/GestionLayout'
+import GestionDashboard from '@/features/books/pages/GestionDashboard'
+import DraftsPage from '@/features/books/pages/DraftsPage'
+import MeBooks from './features/books/pages/MeBooks'
 
 export default function App() {
   return (
@@ -24,15 +30,21 @@ export default function App() {
         <Route path="/books/:page" element={<BooksPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/books" element={<BooksPage />} />
         privadas
         {/* <Route element={<PrivateRoute />}> */}
-        <Route path="/manage/books/create" element={<CreateBooksPage />} />
-        <Route path="/books/manage/config" element={<BooksConfig />} />
+        {/* Gestión */}
+        <Route path="/books/manage" element={<GestionLayout />}>
+            <Route index element={<GestionDashboard />} />
+            <Route path="mebooks" element={<MeBooks />} />
+            <Route path="create" element={<CreateBooksPage />} />
+            <Route path="drafts" element={<DraftsPage />} />
+            <Route path="config" element={<BooksConfig />} />
+          </Route>
+        {/* Otras */}
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<ProfilePage />} />
-          {/* <Route path="/user/:username" element={<User />} /> */}
         <Route path="/docs/*" element={<Docs />} />
-        {/* </Route> */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

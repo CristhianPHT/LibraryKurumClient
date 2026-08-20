@@ -60,10 +60,8 @@ export default function CreateBookPage() {
       setLoading(false)
     }
   }
-
   return (
-    <main className="min-h-full bg-[#111827] px-6 py-8 text-slate-200">
-      <div className="mx-auto max-w-4xl">
+    <section className="text-slate-200">
 
         {/* Page header */}
         <header className="mb-8">
@@ -323,7 +321,6 @@ export default function CreateBookPage() {
           </div>
 
         </form>
-      </div>
-    </main>
+    </section>
   )
 }

@@ -29,6 +29,7 @@ export async function baseRequest( endpoint,
     `${API_BASE}${endpoint}`,
     options
   )
+  // console.log("El resultado de link es: ", res)
   let result = null
 
   try {

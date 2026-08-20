@@ -1,12 +1,12 @@
-┌────────────────────────────┐
+┌────────────────────────────┐  
 │ Página                     │
-│ Organiza la pantalla        │
+│ Organiza la pantalla       │
 └────────────┬───────────────┘
              │
              ▼
 ┌────────────────────────────┐
 │ Componentes                │
-│ Muestran información        │
+│ Muestran información       │
 └────────────┬───────────────┘
              │
              ▼

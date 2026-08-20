@@ -38,7 +38,7 @@ function BookDetail({ book }) {
                   Tipo
                 </dt>
                 <dd className="font-medium">
-                  {book.tipo_id ?? 'No especificado'}
+                  {book.tipo_nombre ?? 'No especificado'}
                 </dd>
               </div>
 
@@ -47,7 +47,7 @@ function BookDetail({ book }) {
                   Estado
                 </dt>
                 <dd className="font-medium">
-                  {book.estado_id ?? 'No especificado'}
+                  {book.estado_nombre ?? 'No especificado'}
                 </dd>
               </div>
 
