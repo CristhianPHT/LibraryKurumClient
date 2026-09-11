@@ -24,6 +24,7 @@ const BooksPage = () => {
         const data = await getBooksByPage(currentPage)
         
         if (!cancelled) {
+          console.log(data)
           setBooks(data?.libros ?? [])
         }
       } catch (error) {

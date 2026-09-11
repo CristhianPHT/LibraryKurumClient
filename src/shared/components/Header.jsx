@@ -24,12 +24,15 @@ export default function Header() {
           Mi biblioteca
         </Link>
         {/* Búsqueda avanzada */}
-        <Link to="/search" className="text-sm text-slate-300 transition-colors hover:text-white" >
+        <Link to="/virtualizacion" className="text-sm text-slate-300 transition-colors hover:text-white" >  {/* Buscar */}
           Buscar
         </Link>
         {/* Gestión / Creador */}
         <Link to="/books/manage/config" className="text-sm text-slate-300 transition-colors hover:text-white" >
           Gestión
+        </Link>
+        <Link to="/libro/date-a-live6" className="text-sm text-slate-300 transition-colors hover:text-white" >
+          LibrosOld
         </Link>
         {/* Búsqueda rápida */}
         <SearchBar />

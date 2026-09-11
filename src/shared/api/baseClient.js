@@ -22,14 +22,14 @@ export async function baseRequest( endpoint,
 
   if (data !== null) {
     options.headers['Content-Type'] =
-      'application/json'
+    'application/json'
     options.body = JSON.stringify(data)
   }
   const res = await fetch(
     `${API_BASE}${endpoint}`,
     options
   )
-  // console.log("El resultado de link es: ", res)
+  // console.log("El resultado de link es: ", options)
   let result = null
 
   try {

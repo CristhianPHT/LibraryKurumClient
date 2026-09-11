@@ -20,6 +20,9 @@ import GestionDashboard from '@/features/books/pages/GestionDashboard'
 import DraftsPage from '@/features/books/pages/DraftsPage'
 import MeBooks from './features/books/pages/MeBooks'
 
+import LibrosTest from './features/books/pages/LibrosTest'
+import VirtualizacionPage from './features/image/page/virtualizacion'
+
 export default function App() {
   return (
   <AuthProvider>
@@ -30,7 +33,9 @@ export default function App() {
         <Route path="/books/:page" element={<BooksPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/virtualizacion" element={<VirtualizacionPage />} />
         <Route path="/books" element={<BooksPage />} />
+        <Route path="/libro/:slug" element={<LibrosTest />} />
         privadas
         {/* <Route element={<PrivateRoute />}> */}
         {/* Gestión */}

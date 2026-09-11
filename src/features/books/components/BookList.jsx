@@ -15,7 +15,7 @@ const BookList = ({ books }) => {
       {books.map((book) => (
         <Link
           key={book.id_libro}
-          to={`/book/${book.id}`}
+          to={`/book/${book.slug}`}
           className="overflow-hidden rounded-lg border border-slate-700 bg-slate-900 transition hover:border-slate-500"
         >
           <article>
