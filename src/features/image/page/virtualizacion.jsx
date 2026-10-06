@@ -1,5 +1,6 @@
+
 import { useEffect, useRef, useState } from 'react'
-import { getImageUploadUrl, uploadImage } from '@/features/image/api/imageApi'
+import { createImageUpload } from '@/features/image/api/imageApi'
 
 const MAX_SIZE_MB = 5
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024
@@ -13,20 +14,10 @@ function formatFileSize(bytes) {
 
 const VirtualizacionPage = () => {
   const inputRef = useRef(null)
-  const [uploadUrl, setUploadUrl] = useState(null)
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState(null)
   const [isDragOver, setIsDragOver] = useState(false)
   const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const fetchUploadUrl = async () => {
-      const response = await getImageUploadUrl()
-      setUploadUrl(response)
-    }
-
-    fetchUploadUrl()
-  }, [])
 
   useEffect(() => {
     return () => {
@@ -52,6 +43,7 @@ const VirtualizacionPage = () => {
 
   function selectFile(candidate) {
     const validationError = validateFile(candidate)
+
     if (validationError) {
       setError(validationError)
       return
@@ -89,23 +81,36 @@ const VirtualizacionPage = () => {
   function clearSelection() {
     setFile(null)
     setError(null)
+
     setPreviewUrl((current) => {
       if (current) URL.revokeObjectURL(current)
       return null
     })
+
     if (inputRef.current) {
       inputRef.current.value = ''
     }
   }
+
   async function handleUpload() {
-    if (!file || !uploadUrl) return
-  
+    if (!file) return
+
     try {
-      await uploadImage(uploadUrl, file)
-      console.log('Imagen subida correctamente')
+      console.log(
+        'Iniciando subida de imagen...',
+        file.name,
+        file.type
+      )
+
+      const response = await createImageUpload({
+        filename: file.name,
+        content_type: file.type,
+      })
+
+      console.log(response)
     } catch (error) {
       console.error(error)
-      setError('No se pudo subir la imagen.')
+      setError('No se pudo iniciar la subida.')
     }
   }
   return (
@@ -180,7 +185,7 @@ const VirtualizacionPage = () => {
               >
                 Quitar
               </button>
-              <button type="button" onClick={handleUpload} disabled={!uploadUrl}
+              <button type="button" onClick={handleUpload} 
                 className="rounded border border-green-500/40 px-3 py-1.5 text-sm text-green-300 transition-colors hover:bg-green-500/10"
               >
                 Subir {/* className="bg-white px-4 py-2 text-black disabled:opacity-50" */}
@@ -196,11 +201,11 @@ const VirtualizacionPage = () => {
         </p>
       )}
 
-      {uploadUrl && (
+      {/* {uploadUrl && (
         <p className="text-sm text-white/60">
           URL de subida recibida correctamente.
         </p>
-      )}
+      )} */}
     </div>
   )
 }
